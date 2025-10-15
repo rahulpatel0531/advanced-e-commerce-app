@@ -41,5 +41,4 @@ Create requests according to endpoints above. Typical flow:
 
 
 ## Postman Collection
-Import this Postman collection to test all APIs:
-[advanced_e_commerce_api_node.json]([(https://github.com/rahulpatel0531/advanced-e-commerce-app/blob/main/advanced_e_commerce_api_node.json)])
+https://github.com/rahulpatel0531/advanced-e-commerce-app/blob/main/advanced_e_commerce_api_node.json
