@@ -38,3 +38,8 @@ Create requests according to endpoints above. Typical flow:
 3. As user add to cart
 4. POST /orders/checkout -> receive order with status PENDING_PAYMENT
 5. POST /orders/:id/pay with `{ transactionId, amount, status: 'SUCCESS' }` -> order becomes PAID
+
+
+## Postman Collection
+Import this Postman collection to test all APIs:
+[advanced_e_commerce_api_node.json]([(https://github.com/rahulpatel0531/advanced-e-commerce-app/blob/main/advanced_e_commerce_api_node.json)])
