@@ -1,0 +1,203 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-ecommerce-api",
+    "name": "Advanced E-Commerce API Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Ready-to-run Postman collection for Advanced E-Commerce API (Node + MongoDB)."
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"user@example.com\",\n  \"password\": \"123456\",\n  \"role\": \"USER\"\n}"
+            },
+            "url": {"raw": "http://localhost:3000/auth/register", "host": ["http://localhost:3000"], "path": ["auth", "register"]}
+          }
+        },
+        {
+          "name": "Register Admin",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Admin User\",\n  \"email\": \"admin@example.com\",\n  \"password\": \"123456\",\n  \"role\": \"ADMIN\"\n}"
+            },
+            "url": {"raw": "http://localhost:3000/auth/register", "host": ["http://localhost:3000"], "path": ["auth", "register"]}
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "var jsonData = pm.response.json();",
+                "pm.environment.set('user_token', jsonData.token);"
+              ],
+              "type": "text/javascript"
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {"raw": "http://localhost:3000/auth/login", "host": ["http://localhost:3000"], "path": ["auth", "login"]}
+          }
+        },
+        {
+          "name": "Login Admin",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "var jsonData = pm.response.json();",
+                "pm.environment.set('admin_token', jsonData.token);"
+              ],
+              "type": "text/javascript"
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {"raw": "http://localhost:3000/auth/login", "host": ["http://localhost:3000"], "path": ["auth", "login"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Add Product (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer {{admin_token}}"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"iPhone 15\",\n  \"price\": 80000,\n  \"description\": \"Latest Apple iPhone 15\",\n  \"stock\": 10\n}"
+            },
+            "url": {"raw": "http://localhost:3000/products", "path": ["products"]}
+          }
+        },
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "http://localhost:3000/products", "path": ["products"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "Add Item to Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer {{user_token}}"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"quantity\": 2\n}"
+            },
+            "url": {"raw": "http://localhost:3000/cart/items", "path": ["cart", "items"]}
+          }
+        },
+        {
+          "name": "View Cart",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{user_token}}"}],
+            "url": {"raw": "http://localhost:3000/cart", "path": ["cart"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Checkout Order",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Authorization", "value": "Bearer {{user_token}}"}],
+            "url": {"raw": "http://localhost:3000/orders/checkout", "path": ["orders", "checkout"]}
+          }
+        },
+        {
+          "name": "Pay for Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer {{user_token}}"}
+            ],
+            "body": {"mode": "raw", "raw": "{\n  \"transactionId\": \"txn_12345\",\n  \"status\": \"SUCCESS\"\n}"},
+            "url": {"raw": "http://localhost:3000/orders/{{orderId}}/pay", "path": ["orders", "{{orderId}}", "pay"]}
+          }
+        },
+        {
+          "name": "Get My Orders",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{user_token}}"}],
+            "url": {"raw": "http://localhost:3000/orders", "path": ["orders"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Get All Orders (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{admin_token}}"}],
+            "url": {"raw": "http://localhost:3000/admin/orders", "path": ["admin", "orders"]}
+          }
+        },
+        {
+          "name": "Update Order Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer {{admin_token}}"}
+            ],
+            "body": {"mode": "raw", "raw": "{\n  \"status\": \"SHIPPED\"\n}"},
+            "url": {"raw": "http://localhost:3000/admin/orders/{{orderId}}/status", "path": ["admin", "orders", "{{orderId}}", "status"]}
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {"key": "base_url", "value": "http://localhost:3000"},
+    {"key": "user_token", "value": ""},
+    {"key": "admin_token", "value": ""},
+    {"key": "productId", "value": ""},
+    {"key": "orderId", "value": ""}
+  ]
+}
